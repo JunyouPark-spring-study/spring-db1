@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.SQLException;
 
+import static org.assertj.core.api.Assertions.*;
+
 @Slf4j
 class MemberRepositoryV0Test {
     MemberRepositoryV0 repository = new MemberRepositoryV0();
@@ -14,12 +16,17 @@ class MemberRepositoryV0Test {
     @Test
     void crud() throws SQLException {
         // save
-        Member member = new Member("memberV3", 10000);
+        Member member = new Member("memberV4", 10000);
         repository.save(member);
 
         // findById
         Member findMember = repository.findById(member.getMemberId());
         log.info("findMember={}", findMember);
-        Assertions.assertThat(findMember).isEqualTo(member);
+        assertThat(findMember).isEqualTo(member);
+
+        // update: money: 10000 => 20000
+        repository.update(member.getMemberId(), 20000);
+        Member updateMember = repository.findById(member.getMemberId());
+        assertThat(updateMember.getMoney()).isEqualTo(20000);
     }
 }
